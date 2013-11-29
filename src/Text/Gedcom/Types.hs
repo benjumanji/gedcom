@@ -6,7 +6,7 @@ import Text.Gedcom.Tree
 
 data XRef = XRef ByteString Integer deriving (Eq,Ord,Show)
 
-data Gedcom = Head XRef ByteString (Tree Record)
+data Gedcom = Gedcom XRef ByteString (Tree Record)
 
 data Record = Record ByteString Payload deriving (Eq, Show)
 

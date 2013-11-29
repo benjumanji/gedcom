@@ -12,8 +12,8 @@ data Zipper a = Z (Tree a) [Segment a]
 zipper :: Tree a -> Zipper a
 zipper x = Z x []
 
-tree :: Zipper a -> Tree a
-tree (Z x _) = x
+getTree :: Zipper a -> Tree a
+getTree (Z x _) = x
 
 goLeft :: Zipper a -> Maybe (Zipper a)
 goLeft (Z (In (Bin x l r)) bs) = Just $ Z l ((BranchLeft x r):bs)
@@ -31,7 +31,7 @@ goUp (Z _ []) = Nothing
 goTop :: Zipper a -> Tree a
 goTop = go
   where
-    go z = maybe (tree z) go . goUp $ z
+    go z = maybe (getTree z) go . goUp $ z
 
 rewind :: Int -> Zipper a -> Maybe (Zipper a)
 rewind n z = if n <= 0 

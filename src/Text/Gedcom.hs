@@ -34,9 +34,7 @@ import Text.Gedcom.Tree
 import Text.Gedcom.Types
 
 settext :: String -> Parser ByteString
-settext = token . sliced . f 
-  where
-    f = skipSome . oneOfSet . CS.fromList
+settext = token . sliced . skipSome . oneOf
 
 otherChar :: Parser ByteString
 otherChar = settext otherChars
@@ -68,6 +66,8 @@ anyChar = (sliced . skipSome $ (na <|> at)) <* spaces
     na = oneOfSet . CS.fromList $ nonAtChars
     at = char '@'
 
+-- | parse a natural, check the allowable range, then chose the appropriate 
+--   focus selecting zipper function
 level :: StateT Int Parser (Record -> Zipper Record -> Maybe (Zipper Record))
 level = do 
     l <- fromInteger <$> lookAhead natural 
@@ -94,7 +94,7 @@ payload = (X <$> xref) <|> (B <$> anyChar)
 record :: StateT (Int, Zipper Record) Parser ()
 record = do 
     graft <- zoom _1 level
-    record <- Record <$> lift alpha <*> lift payload
+    record <- lift $ Record <$> alpha <*> payload
     z <- zoom _2 get
     maybe (lift . raiseErr $ e) (zoom _2 . put) $ graft record z
   where
@@ -103,6 +103,12 @@ record = do
 tree :: Parser (Tree Record)
 tree = (goTop . snd) <$> execStateT (skipSome record) (1, z)
   where z = Z leaf []
+
+zero :: Parser Char
+zero = token $ char '0'
+
+gedcom :: Parser Gedcom
+gedcom = Gedcom <$ zero <*> xref <*> alpha <*> tree
 
 parseX p = parseString p mempty
 parseF = parseFromFile
