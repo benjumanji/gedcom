@@ -1,0 +1,7 @@
+cabal.sandbox.config
+**/tags
+dist
+.cabal-sandbox/
+**/*.swp
+swp
+.shake.*
