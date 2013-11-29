@@ -1,6 +1,5 @@
 {-# LANGUAGE NoMonomorphismRestriction
-  , OverloadedStrings  
-  , MultiWayIf #-}
+  , OverloadedStrings #-}
 
 module Text.Gedcom
   where
@@ -77,9 +76,10 @@ level = do
     unless cond (lift . raiseErr . err $ c) 
     natural
     put l
-    let f = if | l == c     -> graftLeft
-               | l == c + 1 -> graftRight
-               | True       -> (\r z -> graftLeft r (rewind (c - l) z))
+    let f = case () of
+               _ | l == c     -> graftLeft
+               _ | l == c + 1 -> graftRight
+               _ | True       -> (\r -> graftLeft r <=< rewind (c - l))
     return f
   where
     err = Err Nothing [] . S.singleton . expected

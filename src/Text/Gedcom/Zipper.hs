@@ -33,14 +33,15 @@ goTop = go
   where
     go z = maybe (tree z) go . goUp $ z
 
-rewind :: Int -> Zipper a -> Zipper a
-rewind = go
+rewind :: Int -> Zipper a -> Maybe (Zipper a)
+rewind n z = if n <= 0 
+                 then error "rewind must be called with a strictly positive number"
+                 else go n z
   where
-    go n z = maybe z (uncurry go) $ f n z
-    f 0 z = Nothing
-    f n (Z r ((BranchRight x l):bs)) = Just $ (n, Z (bin x l r) bs)
-    f n (Z l ((BranchLeft x r):bs)) = Just $ (n - 1, Z (bin x l r) bs)
-    f _ _ = Nothing
+    go 0 z = Just z
+    go n (Z r ((BranchRight x l):bs)) = go (n - 1) (Z (bin x l r) bs)
+    go n (Z l ((BranchLeft x r):bs)) = go n (Z (bin x l r) bs)
+    go  _ _ = Nothing
 
 graftLeft :: a -> Zipper a -> Maybe (Zipper a)
 graftLeft x (Z (In Leaf) []) = Just $ Z (bin x leaf leaf) []

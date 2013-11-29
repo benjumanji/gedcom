@@ -22,7 +22,7 @@ cata alg = alg . fmap (cata alg) . out
 
 renderAlg :: Show a => Algebra (TreeF a) [String]
 renderAlg Leaf = []
-renderAlg (Bin x l r) = (show x):(l ++ (f r))
+renderAlg (Bin x l r) = (show x):((f r) ++ l)
   where f = map ("  " ++)
 
 render :: Show a => Tree a -> String
