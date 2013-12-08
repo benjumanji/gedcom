@@ -16,18 +16,26 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Text.Gedcom
+  exposed-modules:     Text.Gedcom, 
+                       Text.Gedcom.Parser,
+                       Text.Gedcom.Types, 
+                       Text.Gedcom.Utils
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.6 && <4.7,
-                       bytestring ==0.10.*,
-                       charset ==0.3.*,
-                       containers ==0.5.*,
-                       parsers ==0.10.*,
-                       text ==0.11.3.*,
-                       transformers ==0.3.*,
-                       trifecta ==1.2.*,
-                       lens == 3.9.*
+                       bytestring,
+                       charset,
+                       containers,
+                       hashable,
+                       lens ==3.9.*,
+                       parsers,
+                       recursion-schemes,
+                       text,
+                       transformers,
+                       trifecta,
+                       uniplate,
+                       unordered-containers,
+                       safe
 
   hs-source-dirs:      src
   default-language:    Haskell2010
