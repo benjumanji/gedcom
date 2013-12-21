@@ -20,9 +20,8 @@ library
                        Text.Gedcom.Parser,
                        Text.Gedcom.Types, 
                        Text.Gedcom.Utils
-  -- other-modules:       
-  -- other-extensions:    
   build-depends:       base >=4.6 && <4.7,
+                       attoparsec,
                        bytestring,
                        charset,
                        containers,
@@ -32,7 +31,6 @@ library
                        recursion-schemes,
                        text,
                        transformers,
-                       trifecta,
                        uniplate,
                        unordered-containers,
                        safe
